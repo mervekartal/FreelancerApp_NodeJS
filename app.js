@@ -5,11 +5,12 @@ const path = require('path')
 const mongoose = require('mongoose');
 
 const pageController = require('./controllers/pageController')
+const portfolioController = require('./controllers/portfolioController')
 
-
-mongoose.set('strictQuery', false)
 
 //connect db
+mongoose.set('strictQuery', false)
+
 mongoose.connect('mongodb://localhost:27017/freelancer-db').then(() => {
     console.log('DB Connection Successful')
 }).catch((err) => {
@@ -23,6 +24,8 @@ process.on('warning', (warning) => {
 
 //middlewares
 app.use(express.static('public'))
+app.use(express.json()) 
+app.use(express.urlencoded({extended: true}))
 
 //Template Engine
 app.set("view engine", "ejs")
@@ -32,6 +35,8 @@ app.get('/', pageController.getIndexPage) //home page - index
 app.get('/about', pageController.getAboutPage) //about
 app.get('/contact', pageController.getContactPage) //contact
 app.get('/portfolios', pageController.getPortfoliosPage) //all portfolios 
+
+app.post('/portfolios',portfolioController.createPortfolio) //create a new portfolio
 
 
 
