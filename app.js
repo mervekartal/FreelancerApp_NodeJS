@@ -3,6 +3,7 @@ const app = express()
 const ejs = require('ejs')
 const path = require('path')
 const mongoose = require('mongoose');
+const methodOverride = require('method-override')
 
 const pageController = require('./controllers/pageController')
 const portfolioController = require('./controllers/portfolioController')
@@ -26,6 +27,9 @@ process.on('warning', (warning) => {
 app.use(express.static('public'))
 app.use(express.json()) 
 app.use(express.urlencoded({extended: true}))
+app.use(methodOverride('_method',{
+    methods: ['POST','GET'],
+}))
 
 //Template Engine
 app.set("view engine", "ejs")
@@ -34,10 +38,13 @@ app.set("view engine", "ejs")
 app.get('/', pageController.getIndexPage) //home page - index
 app.get('/about', pageController.getAboutPage) //about
 app.get('/contact', pageController.getContactPage) //contact
-app.get('/portfolios', pageController.getPortfoliosPage) //all portfolios 
+// app.get('/portfolios', pageController.getPortfoliosPage) //portfolio page
 
 app.post('/portfolios',portfolioController.createPortfolio) //create a new portfolio
-
+app.get('/portfolios', portfolioController.getAllPortfolios) //all portfolio list
+app.get('/portfolios/:slug', portfolioController.getPortfolio) //portfolio's single page
+app.delete('/portfolios/:slug', portfolioController.deletePortfolio) //delete portfolio
+app.put('/portfolios/:slug', portfolioController.updatePortfolio) //update portfolio
 
 
 
