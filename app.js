@@ -2,12 +2,18 @@ const express = require('express')
 const app = express()
 const ejs = require('ejs')
 const path = require('path')
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 const methodOverride = require('method-override')
+const fileUpload = require('express-fileupload')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')
 
 const pageController = require('./controllers/pageController')
 const portfolioController = require('./controllers/portfolioController')
 
+const pageRoute = require('./routes/pageRoute')
+const portfolioRoute = require('./routes/portfolioRoute')
+const userRoute = require('./routes/userRoute')
 
 //connect db
 mongoose.set('strictQuery', false)
@@ -30,22 +36,31 @@ app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method',{
     methods: ['POST','GET'],
 }))
+app.use(fileUpload())
+app.use(session({
+    secret: 'my_keyboard_cat',
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/freelancer-db' })
+  }))
+
 
 //Template Engine
 app.set("view engine", "ejs")
 
-//routes
-app.get('/', pageController.getIndexPage) //home page - index
-app.get('/about', pageController.getAboutPage) //about
-app.get('/contact', pageController.getContactPage) //contact
-// app.get('/portfolios', pageController.getPortfoliosPage) //portfolio page
+//global variable
+global.userIN = null //false
 
-app.post('/portfolios',portfolioController.createPortfolio) //create a new portfolio
-app.get('/portfolios', portfolioController.getAllPortfolios) //all portfolio list
-app.get('/portfolios/:slug', portfolioController.getPortfolio) //portfolio's single page
-app.delete('/portfolios/:slug', portfolioController.deletePortfolio) //delete portfolio
-app.put('/portfolios/:slug', portfolioController.updatePortfolio) //update portfolio
+app.use('*',(req, res, next) => {
+    userIN = req.session.userID
+    next()
+})
 
+
+//routes - CRUD
+app.use('/', pageRoute) //aynı kullanım -> app.get('/', pageRoute) 
+app.use('/portfolios', portfolioRoute)
+app.use('/users', userRoute)
 
 
 const port = 3000
