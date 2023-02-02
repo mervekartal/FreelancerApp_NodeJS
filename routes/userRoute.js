@@ -21,7 +21,7 @@ router.route('/signup').post([
 
 router.route('/login').post(authController.loginUser) 
 router.route('/logout').get(authController.logoutUser) 
-router.route('/portfolios').get(authMiddleware, authController.getPortfoliosPage) //url üzerinden dashboard sayfasına gitmek isteyen kullanıcılar, giriş yapmadıysa login sayfasına yönlendirilir. 
+router.route('/portfolios').get(authMiddleware, authController.getPortfoliosPage) //url üzerinden portfolios sayfasına gitmek isteyen kullanıcılar, giriş yapmadıysa login sayfasına yönlendirilir. 
 
 
 module.exports = router
