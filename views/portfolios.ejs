@@ -14,8 +14,8 @@
                     </div>
 
                     <div class="row">
-                        <% if(userIN) { %>
-                            <h6 class="text-center text-secondary mb-3"> Hello, Let's take a look around ! </h6>
+                        <% if(user) { %>
+                            <h6 class="text-center text-secondary mb-3"> Hello <%= user.name %>, let's take a look around ! </h6>
                             <% } %>
         
                         <div class="col-md-12 col-lg-12 text-center">
@@ -76,7 +76,7 @@
                                    <div class="portfolio-item-caption-content text-center text-white"><span><%= portfolios[i].title %></span></div>
                                 </div>
                               </a>
-                                <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..." />
+                                <img class="img-fluid" src="/assets/img/portfolio/cabin.png" alt="..." />
                             </div>
                         </div>
                         <% } %>

@@ -7,6 +7,7 @@ const methodOverride = require('method-override')
 const fileUpload = require('express-fileupload')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
+const flash = require('connect-flash')
 
 const pageController = require('./controllers/pageController')
 const portfolioController = require('./controllers/portfolioController')
@@ -43,7 +44,13 @@ app.use(session({
     saveUninitialized: true,
     store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/freelancer-db' })
   }))
-
+app.use(flash())
+  //flash'taki mesajları flashMessages değişkenine atamak için bir middleware yaratıldı
+app.use((req, res, next) => {
+    res.locals.flashMessages = req.flash()
+    next()
+  })
+  
 
 //Template Engine
 app.set("view engine", "ejs")

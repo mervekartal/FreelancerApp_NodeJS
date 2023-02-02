@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 
 const User = require('../models/User')
+const Portfolio = require('../models/Portfolio')
 const { validationResult } = require('express-validator')
 
 exports.createUser = async (req,res) => {
@@ -34,7 +35,7 @@ exports.loginUser = async (req, res) => {
           if (same) {
             // USER SESSION
             req.session.userID = user._id;
-            res.status(200).redirect('/portfolios');
+            res.status(200).redirect('/users/portfolios');
           } else {
             req.flash('error', 'Your email or password is  incorrect!');
             res.status(400).redirect('/login');
@@ -59,7 +60,7 @@ exports.logoutUser = (req, res) => {
 }
 
 exports.getPortfoliosPage = async (req,res) => {
-    const user = await (await User.findOne({_id: req.session.userID}))
+    const user = await User.findOne({_id: req.session.userID})
     const portfolios = await Portfolio.find()
     const users = await User.find()
     res.status(200).render('portfolios',{

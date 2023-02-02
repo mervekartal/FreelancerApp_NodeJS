@@ -22,6 +22,21 @@
                                 <!-- https://startbootstrap.com/solution/contact-forms-->
                                 <!-- to get an API token!-->
                                 <form method="post" action="users/signup">
+                                    <div class="form-floating mb-3">
+                                        <% if(flashMessages){  %>
+                                            <% if(flashMessages.success) { %>
+                                                <div class="alert alert-success">
+                                                    <%= flashMessages.success %>
+                                                </div>
+                                            <% } else if(flashMessages.error){ %>
+                                                <div class="alert alert-danger">
+                                                    <%= flashMessages.error %>
+                                                </div>
+                                            <% } %>
+                                        <% } %>
+    
+                                    </div>
+
                                     <!-- Name input-->
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." />
